@@ -3,5 +3,8 @@
 "private": true,
 "workspaces": [
 "apps/*"
-]
+],
+"packageManager": "pnpm@10.11.0"
 }
+
+
