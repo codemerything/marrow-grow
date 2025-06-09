@@ -1,0 +1,7 @@
+{
+"name": "marrow-grow",
+"private": true,
+"workspaces": [
+"apps/*"
+]
+}
