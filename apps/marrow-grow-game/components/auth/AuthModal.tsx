@@ -28,6 +28,7 @@ interface AuthBackendResponse {
     // ... any other relevant fields your backend sends for the user
   };
   accessToken: string; // The JWT access token
+  message?: string;
   // refreshToken is often handled by an httpOnly cookie, so may not be in JSON response
 }
 
@@ -71,7 +72,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
       if (!response.ok) {
         throw new Error(responseData.message || "Failed to sign in"); // Assuming backend sends { message: "..." } on error
       }
-      
+
       // Map backend 'player' object to frontend 'User' type
       const userDataForStore: User = {
         username: responseData.player.username, //
@@ -130,7 +131,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         lastSpinDate: responseData.player.lastSpinDate, //
         // id: responseData.player._id,
       };
-      
+
       loginUserAction(userDataForStore, responseData.accessToken);
       onClose(); //
 
