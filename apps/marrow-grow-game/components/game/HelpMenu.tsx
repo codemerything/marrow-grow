@@ -102,7 +102,7 @@ export default function HelpMenu({
           <div className="pt-2 mt-2 border-t border-gray-700"> {/* Optional Separator */}
             <GameButton
               onClick={handleLogout}
-              variant="danger" // Assuming you have or will add a 'danger' variant for logout
+              variant="secondary" // Assuming you have or will add a 'danger' variant for logout
               className="w-full h-10 text-xs"
               icon={<LogOut size={14} className="text-red-400" />} // Using LogOut icon
             >
