@@ -32,20 +32,20 @@ export default function GameDashboard({ user, onPlayClick, onLogout, onUpdateLiv
     // Check if user can spin today (24-hour cooldown)
     const checkSpinEligibility = () => {
       const lastSpinDate = localStorage.getItem('lastSpinDate')
-      
+
       if (!lastSpinDate) {
         setCanSpin(true)
         return
       }
-      
+
       const lastSpin = new Date(lastSpinDate)
       const now = new Date()
       const hoursSinceLastSpin = (now.getTime() - lastSpin.getTime()) / (1000 * 60 * 60)
-      
+
       // Allow spin if 24 hours have passed since last spin
       setCanSpin(hoursSinceLastSpin >= 24)
     }
-    
+
     // Load seed lives from localStorage or use default from user prop
     const loadSeedLives = () => {
       const storedLives = localStorage.getItem('seedLives')
@@ -56,27 +56,27 @@ export default function GameDashboard({ user, onPlayClick, onLogout, onUpdateLiv
         localStorage.setItem('seedLives', user.lives.toString())
       }
     }
-    
+
     checkSpinEligibility()
     loadSeedLives()
-    
+
     // Check eligibility every minute in case the 24-hour period expires while user is on the page
     const intervalId = setInterval(checkSpinEligibility, 60000)
-    
+
     return () => clearInterval(intervalId)
   }, [user.lives])
 
-  const handleSpinComplete = (won: boolean) => {
-    if (won) {
+  const handleSpinComplete = (awardedLives: number) => {
+    if (awardedLives > 0) {
       // Update lives in localStorage
-      const newLives = localLives + 1
+      const newLives = localLives + awardedLives
       localStorage.setItem('seedLives', newLives.toString())
       setLocalLives(newLives)
-      
+
       // Also update parent component state
       onUpdateLives(newLives)
     }
-    
+
     // Update spin status
     setCanSpin(false)
   }
@@ -95,7 +95,7 @@ export default function GameDashboard({ user, onPlayClick, onLogout, onUpdateLiv
 
         {/* Main Dashboard with User Info */}
         <DashboardMenu
-          user={{...user, lives: localLives}} // Use local lives from localStorage
+          user={{ ...user, lives: localLives }} // Use local lives from localStorage
           canSpinToday={canSpin}
           onDailySpinClick={() => setIsSpinModalOpen(true)}
           onHowToPlayClick={() => setIsHowToPlayOpen(true)}
