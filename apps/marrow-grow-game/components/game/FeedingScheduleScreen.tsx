@@ -5,10 +5,11 @@ import Image from "next/image"
 import Header from "@/components/layout/Header"
 import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight } from "lucide-react"
-import type { GameOptions } from "@/stores/useGameStore"
+import type { GameOptions, User } from "@/stores/useGameStore"
 
 interface FeedingScheduleScreenProps {
-  // Prop changed to pass data
+  user: User; // Add this line
+  gameOptions: GameOptions; // Add this line
   onScheduleConfirm: (schedule: Required<GameOptions>['feedingSchedule']) => void;
   onBack: () => void;
 }
@@ -45,6 +46,7 @@ const nutrientMixes = {
   },
 }
 
+// Modify the function signature to destructure 'user' and 'gameOptions'
 export default function FeedingScheduleScreen({ onScheduleConfirm, onBack }: FeedingScheduleScreenProps) {
   const [feedAmounts, setFeedAmounts] = useState({ month1: 0, month2: 0, month3: 0 });
   const [selectedNutrients, setSelectedNutrients] = useState({ month1: "basic", month2: "basic", month3: "basic" });
@@ -69,6 +71,7 @@ export default function FeedingScheduleScreen({ onScheduleConfirm, onBack }: Fee
     console.log("Feeding Schedule Confirmed:", scheduleData);
     onScheduleConfirm(scheduleData); // Use the new prop to pass data
   };
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-950">
@@ -130,11 +133,10 @@ export default function FeedingScheduleScreen({ onScheduleConfirm, onBack }: Fee
                         <button
                           key={key}
                           onClick={() => selectNutrient("month1", key)}
-                          className={`w-[100px] px-2 py-2 rounded border-2 transition-colors flex-shrink-0 ${
-                            selectedNutrients.month1 === key
-                              ? "border-blue-400 bg-blue-900/50 text-blue-300"
-                              : "border-gray-600 bg-gray-700 text-gray-300 hover:border-blue-500"
-                          }`}
+                          className={`w-[100px] px-2 py-2 rounded border-2 transition-colors flex-shrink-0 ${selectedNutrients.month1 === key
+                            ? "border-blue-400 bg-blue-900/50 text-blue-300"
+                            : "border-gray-600 bg-gray-700 text-gray-300 hover:border-blue-500"
+                            }`}
                         >
                           <div className="font-pixel text-[10px] text-center leading-tight">{nutrient.name}</div>
                         </button>
@@ -175,11 +177,10 @@ export default function FeedingScheduleScreen({ onScheduleConfirm, onBack }: Fee
                         <button
                           key={key}
                           onClick={() => selectNutrient("month2", key)}
-                          className={`w-[100px] px-2 py-2 rounded border-2 transition-colors flex-shrink-0 ${
-                            selectedNutrients.month2 === key
-                              ? "border-green-400 bg-green-900/50 text-green-300"
-                              : "border-gray-600 bg-gray-700 text-gray-300 hover:border-green-500"
-                          }`}
+                          className={`w-[100px] px-2 py-2 rounded border-2 transition-colors flex-shrink-0 ${selectedNutrients.month2 === key
+                            ? "border-green-400 bg-green-900/50 text-green-300"
+                            : "border-gray-600 bg-gray-700 text-gray-300 hover:border-green-500"
+                            }`}
                         >
                           <div className="font-pixel text-[10px] text-center leading-tight">{nutrient.name}</div>
                         </button>
@@ -220,11 +221,10 @@ export default function FeedingScheduleScreen({ onScheduleConfirm, onBack }: Fee
                         <button
                           key={key}
                           onClick={() => selectNutrient("month3", key)}
-                          className={`w-[100px] px-2 py-2 rounded border-2 transition-colors flex-shrink-0 ${
-                            selectedNutrients.month3 === key
-                              ? "border-purple-400 bg-purple-900/50 text-purple-300"
-                              : "border-gray-600 bg-gray-700 text-gray-300 hover:border-purple-500"
-                          }`}
+                          className={`w-[100px] px-2 py-2 rounded border-2 transition-colors flex-shrink-0 ${selectedNutrients.month3 === key
+                            ? "border-purple-400 bg-purple-900/50 text-purple-300"
+                            : "border-gray-600 bg-gray-700 text-gray-300 hover:border-purple-500"
+                            }`}
                         >
                           <div className="font-pixel text-[10px] text-center leading-tight">{nutrient.name}</div>
                         </button>
