@@ -1,11 +1,11 @@
 // store/gameStore.ts
-import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
 
 // --- Core Types ---
 type GameState = "login" | "dashboard" | "selection" | "feeding" | "playing";
 
-interface User {
+export interface User {
   username: string;
   email: string;
   lives: number; // Corresponds to 'seedLives' from PlayerSchema
@@ -13,7 +13,8 @@ interface User {
 }
 
 // --- Detailed Option Interfaces ---
-export interface SelectedSeed { // Exporting for use in GameSelection.tsx
+export interface SelectedSeed {
+  // Exporting for use in GameSelection.tsx
   id: string; // The _id from your API
   name: string;
   description: string;
@@ -22,7 +23,8 @@ export interface SelectedSeed { // Exporting for use in GameSelection.tsx
   nutrientDrainRate: number;
 }
 
-export interface SelectedSoil { // Exporting
+export interface SelectedSoil {
+  // Exporting
   id: string;
   name: string;
   description: string;
@@ -31,7 +33,8 @@ export interface SelectedSoil { // Exporting
   nutrientDrainRate: number; // Based on game.js logic
 }
 
-export interface SelectedDefense { // Exporting
+export interface SelectedDefense {
+  // Exporting
   id: string;
   name: string;
   description: string;
@@ -39,7 +42,8 @@ export interface SelectedDefense { // Exporting
 }
 
 // GameOptions stores the selected items and the feeding schedule
-export interface GameOptions { // Exporting for use elsewhere if needed
+export interface GameOptions {
+  // Exporting for use elsewhere if needed
   selectedSeed?: SelectedSeed;
   selectedSoil?: SelectedSoil;
   selectedDefense?: SelectedDefense;
@@ -74,7 +78,9 @@ interface GameStoreState {
       soil: SelectedSoil;
       defense: SelectedDefense;
     }) => void;
-    completeFeeding: (feedingOptions: Required<GameOptions>['feedingSchedule']) => void;
+    completeFeeding: (
+      feedingOptions: Required<GameOptions>["feedingSchedule"]
+    ) => void;
     resetGameOptions: () => void;
   };
 }
@@ -91,14 +97,30 @@ export const useGameStore = create(
 
       // Actions Implementation
       actions: {
-        loginUser: (userData, token) => set({ user: userData, accessToken: token, gameState: "dashboard", gameOptions: {} }),
-        logoutUser: () => set({ user: null, accessToken: null, gameState: "login", gameOptions: {} }),
+        loginUser: (userData, token) =>
+          set({
+            user: userData,
+            accessToken: token,
+            gameState: "dashboard",
+            gameOptions: {},
+          }),
+        logoutUser: () =>
+          set({
+            user: null,
+            accessToken: null,
+            gameState: "login",
+            gameOptions: {},
+          }),
         setAccessToken: (token) => set({ accessToken: token }),
-        setUserData: (userData) => set((state) => ({ user: state.user ? { ...state.user, ...userData } : null })),
-        updateUserLives: (newLives) => set((state) => {
-          if (state.user) return { user: { ...state.user, lives: newLives } };
-          return {};
-        }),
+        setUserData: (userData) =>
+          set((state) => ({
+            user: state.user ? { ...state.user, ...userData } : null,
+          })),
+        updateUserLives: (newLives) =>
+          set((state) => {
+            if (state.user) return { user: { ...state.user, lives: newLives } };
+            return {};
+          }),
 
         navigateToSelection: () => {
           if (get().user) set({ gameState: "selection" });
@@ -109,25 +131,35 @@ export const useGameStore = create(
           else set({ gameState: "login" });
         },
         navigateToFeeding: () => {
-          if (get().user && get().gameOptions.selectedSeed && get().gameOptions.selectedSoil && get().gameOptions.selectedDefense) {
+          if (
+            get().user &&
+            get().gameOptions.selectedSeed &&
+            get().gameOptions.selectedSoil &&
+            get().gameOptions.selectedDefense
+          ) {
             set({ gameState: "feeding" });
           } else {
-            console.warn("Cannot navigate to feeding: Missing selections or user.");
+            console.warn(
+              "Cannot navigate to feeding: Missing selections or user."
+            );
             set((state) => ({ gameState: state.user ? "selection" : "login" }));
           }
         },
         startGame: () => {
           if (get().user && get().gameOptions.feedingSchedule) {
-             set({ gameState: "playing" });
+            set({ gameState: "playing" });
           } else {
-            console.warn("Cannot start game: Missing feeding schedule or user.");
+            console.warn(
+              "Cannot start game: Missing feeding schedule or user."
+            );
             set((state) => ({ gameState: state.user ? "feeding" : "login" }));
           }
         },
         setGameState: (newState) => set({ gameState: newState }),
 
         completeSelection: (options) => {
-          set((state) => ({ // Ensure state is correctly referenced
+          set((state) => ({
+            // Ensure state is correctly referenced
             gameOptions: {
               ...state.gameOptions, // Preserve existing gameOptions like feedingSchedule if set out of order
               selectedSeed: options.seed,
@@ -139,14 +171,17 @@ export const useGameStore = create(
         },
         completeFeeding: (feedingOptions) => {
           set((state) => ({
-            gameOptions: { ...state.gameOptions, feedingSchedule: feedingOptions },
+            gameOptions: {
+              ...state.gameOptions,
+              feedingSchedule: feedingOptions,
+            },
           }));
         },
         resetGameOptions: () => set({ gameOptions: {} }),
       },
     }),
     {
-      name: 'marrow-grow-game-storage',
+      name: "marrow-grow-game-storage",
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         user: state.user,
