@@ -15,7 +15,7 @@ const app = express();
 
 const allowedOrigins = [
   "https://marrow-grow.vercel.app",
-  "https://marrowgrow-admin.vercel.app/",
+  "https://marrowgrow-admin.vercel.app",
 ];
 
 // CORS middleware FIRST!
