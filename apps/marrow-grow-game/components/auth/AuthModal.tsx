@@ -47,7 +47,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const [error, setError] = useState<string | null>(null);
   const loginUserAction = useGameStore((state) => state.actions.loginUser);
 
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "/marrow-grow-backend";
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL!;
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault(); //

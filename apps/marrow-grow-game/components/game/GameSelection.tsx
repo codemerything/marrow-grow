@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Header from "@/components/layout/Header";
 import { Button } from "@/components/ui/button";
-import { HelpCircle, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import HelpMenu from "@/components/game/HelpMenu";
 import DailySpinModal from "@/components/game/DailySpinModal";
 import HowToPlayModal from "@/components/game/HowToPlayModal";
@@ -91,7 +91,7 @@ interface GameSelectionProps {
 }
 
 type SelectionType = "seed" | "soil" | "defense";
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "/marrow-grow-backend";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL!;
 
 export default function GameSelection({ user, onBackToDashboard, onSelectionComplete }: GameSelectionProps) {
   const [apiSeedOptions, setApiSeedOptions] = useState<ApiSeedData[]>([]);
@@ -194,21 +194,21 @@ export default function GameSelection({ user, onBackToDashboard, onSelectionComp
         <LeaderboardModal isOpen={isLeaderboardModalOpen} onClose={handleCloseLeaderboard} />
         <div className="absolute top-4 left-20 z-10">
           <Button onClick={onBackToDashboard} className="bg-gray-600 hover:bg-gray-700 border-2 border-gray-500 font-pixel text-sm px-4 py-2">
-            <ArrowLeft size={16} className="mr-2 text-yellow-300" /> 
+            <ArrowLeft size={16} className="mr-2 text-yellow-300" />
           </Button>
         </div>
         <div className="absolute top-4 right-4 z-10">
-        <Button
+          <Button
             onClick={toggleHelpMenu}
             className="bg-orange-500 hover:bg-orange-600 border-2 border-orange-400 font-pixel text-xs px-3 py-1 text-black"
           >
             HELP
           </Button>
         </div>
-        {isHelpMenuOpen && <HelpMenu 
-          user={user} 
-          onClose={() => setIsHelpMenuOpen(false)} 
-          onLogoutClick={actions.logoutUser} 
+        {isHelpMenuOpen && <HelpMenu
+          user={user}
+          onClose={() => setIsHelpMenuOpen(false)}
+          onLogoutClick={actions.logoutUser}
           onDailySpinClick={handleOpenDailySpin}
           onHowToPlayClick={handleOpenHowToPlay}
           onLeaderboardClick={handleOpenLeaderboard}
@@ -223,21 +223,21 @@ export default function GameSelection({ user, onBackToDashboard, onSelectionComp
                 <div className="space-y-2">
                   {isLoadingSeeds ? <p className="font-pixel text-center text-gray-400 text-xs">Loading seeds...</p>
                     : errorSeeds ? <p className="font-pixel text-center text-red-400 text-xs">Error: {errorSeeds}</p>
-                    : apiSeedOptions.length === 0 ? <p className="font-pixel text-center text-gray-400 text-xs">No seeds available.</p>
-                    : apiSeedOptions.map((option) => (
-                    <div
-                      key={option._id}
-                      onClick={() => handleSelection("seed", option)}
-                      className={`bg-gray-800 border-2 ${selectedSeedObj?.id === option._id ? "border-cyan-500" : "border-gray-700"} rounded p-2 cursor-pointer hover:bg-gray-700 transition-colors`}
-                    >
-                      <div className="flex flex-col items-center">
-                        <div className="w-16 h-16 mb-1 relative">
-                          <Image src={option.imageUrl} alt={option.name} fill className="object-contain pixel-art" unoptimized />
-                        </div>
-                        <p className="font-pixel text-cyan-300 text-xs text-center">{option.name}</p>
-                      </div>
-                    </div>
-                  ))}
+                      : apiSeedOptions.length === 0 ? <p className="font-pixel text-center text-gray-400 text-xs">No seeds available.</p>
+                        : apiSeedOptions.map((option) => (
+                          <div
+                            key={option._id}
+                            onClick={() => handleSelection("seed", option)}
+                            className={`bg-gray-800 border-2 ${selectedSeedObj?.id === option._id ? "border-cyan-500" : "border-gray-700"} rounded p-2 cursor-pointer hover:bg-gray-700 transition-colors`}
+                          >
+                            <div className="flex flex-col items-center">
+                              <div className="w-16 h-16 mb-1 relative">
+                                <Image src={option.imageUrl} alt={option.name} fill className="object-contain pixel-art" unoptimized />
+                              </div>
+                              <p className="font-pixel text-cyan-300 text-xs text-center">{option.name}</p>
+                            </div>
+                          </div>
+                        ))}
                 </div>
               </div>
 
