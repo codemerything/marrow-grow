@@ -14,8 +14,6 @@ const app = express();
 // List of allowed origins
 
 const allowedOrigins = [
-  "http://localhost:3000",
-  "http://localhost:3001",
   "https://marrow-grow.vercel.app",
   "https://marrowgrow-admin.vercel.app/",
 ];
